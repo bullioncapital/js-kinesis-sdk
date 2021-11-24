@@ -1,5 +1,5 @@
 {
-  "name": "stellar-sdk",
+  "name": "@abx/js-kinesis-sdk",
   "version": "10.4.1",
   "description": "stellar-sdk is a library for working with the Stellar Horizon server.",
   "main": "./lib/index.js",
@@ -46,14 +46,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/stellar/js-stellar-sdk.git"
+    "url": "https://github.com/bullioncapital/js-kinesis-sdk.git"
   },
   "author": "Stellar Development Foundation <hello@stellar.org>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/stellar/js-stellar-sdk/issues"
+    "url": "https://github.com/bullioncapital/js-kinesis-sdk/issues"
   },
-  "homepage": "https://github.com/stellar/js-stellar-sdk",
+  "homepage": "https://github.com/bullioncapital/js-kinesis-sdk",
   "devDependencies": {
     "@kollavarsham/gulp-coveralls": "0.2.8",
     "@stellar/prettier-config": "^1.0.1",
