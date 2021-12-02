@@ -26,7 +26,7 @@ jobs:
       - name: Checkout GH pages
         uses: actions/checkout@v2
         with:
-          repository: stellar/js-stellar-sdk
+          repository: bullioncapital/js-kinesis-sdk
           ref: gh-pages
           path: jsdoc
 
