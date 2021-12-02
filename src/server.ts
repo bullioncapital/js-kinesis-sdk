@@ -1,15 +1,14 @@
 /* tslint:disable:variable-name no-namespace */
-
-import BigNumber from "bignumber.js";
-import isEmpty from "lodash/isEmpty";
-import merge from "lodash/merge";
 import {
   Asset,
   FeeBumpTransaction,
   StrKey,
   Transaction,
   xdr,
-} from "stellar-base";
+} from "@abx/js-kinesis-base";
+import BigNumber from "bignumber.js";
+import isEmpty from "lodash/isEmpty";
+import merge from "lodash/merge";
 import URI from "urijs";
 
 import { CallBuilder } from "./call_builder";
