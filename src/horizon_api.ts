@@ -1,4 +1,4 @@
-import { AssetType, MemoType } from "stellar-base";
+import { AssetType, MemoType } from "@abx/js-kinesis-base";
 
 /* tslint:disable-next-line:no-namespace */
 export namespace Horizon {

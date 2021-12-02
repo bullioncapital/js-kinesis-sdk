@@ -1,5 +1,3 @@
-import clone from "lodash/clone";
-import randomBytes from "randombytes";
 import {
   Account,
   BASE_FEE,
@@ -12,7 +10,9 @@ import {
   TimeoutInfinite,
   Transaction,
   TransactionBuilder,
-} from "stellar-base";
+} from "@abx/js-kinesis-base";
+import clone from "lodash/clone";
+import randomBytes from "randombytes";
 import { InvalidSep10ChallengeError } from "./errors";
 import { ServerApi } from "./server_api";
 

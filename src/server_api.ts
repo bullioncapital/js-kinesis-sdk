@@ -1,4 +1,4 @@
-import { Asset } from "stellar-base";
+import { Asset } from "@abx/js-kinesis-base";
 import { Omit } from "utility-types";
 import { Horizon } from "./horizon_api";
 
