@@ -42,6 +42,7 @@ import { TransactionCallBuilder } from "./transaction_call_builder";
 import HorizonAxiosClient, {
   getCurrentServerTime,
 } from "./horizon_axios_client";
+import { ServerApi } from "./server_api";
 
 export const SUBMIT_TRANSACTION_TIMEOUT = 60 * 1000;
 
@@ -73,9 +74,11 @@ export class Server {
    * TODO: Solve `URI(this.serverURL as any)`.
    */
   public readonly serverURL: URI;
+  public readonly v1: boolean;
 
   constructor(serverURL: string, opts: Server.Options = {}) {
     this.serverURL = URI(serverURL);
+    this.v1 = opts?.v1 === undefined ? true : opts.v1;
 
     const allowHttp =
       typeof opts.allowHttp === "undefined"
@@ -172,9 +175,12 @@ export class Server {
    * @returns {Promise<number>} Promise that resolves to the base fee.
    */
   public async fetchBaseFee(): Promise<number> {
-    const response = await this.feeStats();
-
-    return parseInt(response.last_ledger_base_fee, 10) || 100;
+    if (this.v1) {
+      const response = await this.feeStats();
+      return parseInt(response.last_ledger_base_fee, 10) || 100;
+    } else {
+      return this._getBaseFeeV0();
+    }
   }
 
   /**
@@ -817,6 +823,18 @@ export class Server {
       }
     }
   }
+
+  private async _getBaseFeeV0(): Promise<number> {
+    const cb = new CallBuilder<
+      ServerApi.CollectionPage<ServerApi.LedgerRecord>
+    >(URI(this.serverURL as any));
+    cb.filter.push(["ledgers"]);
+    const { records } = await cb
+      .order("desc")
+      .limit(1)
+      .call();
+    return records[0].base_fee_in_stroops || 100;
+  }
 }
 
 export namespace Server {
@@ -825,6 +843,7 @@ export namespace Server {
     appName?: string;
     appVersion?: string;
     authToken?: string;
+    v1?: boolean;
   }
 
   export interface Timebounds {
