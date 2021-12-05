@@ -24,6 +24,8 @@ jobs:
           node-version: '14.x'
 
       - name: Install and build package
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           yarn install
           yarn build
