@@ -1,6 +1,6 @@
 {
   "name": "@abx/js-kinesis-sdk",
-  "version": "9.1.0",
+  "version": "9.1.0-beta.0",
   "description": "stellar-sdk is a library for working with the Stellar Horizon server.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -127,6 +127,7 @@
     "webpack-stream": "^5.2.1"
   },
   "dependencies": {
+    "@abx/js-kinesis-base": "^6.0.6-beta.1",
     "@types/eventsource": "^1.1.2",
     "@types/node": ">= 8",
     "@types/randombytes": "^2.0.0",
@@ -138,7 +139,6 @@
     "eventsource": "^1.0.7",
     "lodash": "^4.17.21",
     "randombytes": "^2.1.0",
-    "@abx/js-kinesis-base": "^6.0.6-beta.1",
     "toml": "^2.3.0",
     "tslib": "^1.10.0",
     "urijs": "^1.19.1",
