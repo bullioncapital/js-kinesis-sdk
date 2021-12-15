@@ -149,6 +149,7 @@ export namespace ServerApi {
     max_tx_set_size: number;
     protocol_version: number;
     header_xdr: string;
+    base_percentage_fee: number;
     base_fee_in_stroops: number;
     base_reserve_in_stroops: number;
     /**
