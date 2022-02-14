@@ -11,7 +11,7 @@ title: Basic Examples
 //registry.npmjs.org/:_authToken=${NPM_TOKEN}
 ```
 
-Then `npm install @abx/js-kinesis-sdk@9.1.0-beta.4`
+Then `npm install @abx/js-kinesis-sdk@9.1.0-beta.5`
 
 - [Creating a payment Transaction](#creating-a-payment-transaction)
 - [Loading an account's transaction history](#loading-an-accounts-transaction-history)
