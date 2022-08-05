@@ -282,6 +282,25 @@ export namespace ServerApi {
       >,
       Horizon.RevokeSponsorshipOperationResponse {}
 
+  export interface OnChainFeeOperationRecord extends BaseOperationRecord {
+    type:
+      | OperationResponseType.createAccount
+      | OperationResponseType.payment
+      | OperationResponseType.accountMerge;
+    type_i:
+      | OperationResponseTypeI.createAccount
+      | OperationResponseTypeI.payment
+      | OperationResponseTypeI.accountMerge;
+    account: string;
+    to: string;
+    from: string;
+    into: string;
+    funder: string;
+    amount: string;
+    starting_balance: string;
+    source_account: string;
+  }
+
   export type OperationRecord =
     | CreateAccountOperationRecord
     | PaymentOperationRecord
