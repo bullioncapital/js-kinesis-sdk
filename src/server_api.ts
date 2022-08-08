@@ -303,11 +303,13 @@ export namespace ServerApi {
     type:
       | OperationResponseType.createAccount
       | OperationResponseType.payment
-      | OperationResponseType.accountMerge;
+      | OperationResponseType.accountMerge
+      | OperationResponseType.inflation;
     type_i:
       | OperationResponseTypeI.createAccount
       | OperationResponseTypeI.payment
-      | OperationResponseTypeI.accountMerge;
+      | OperationResponseTypeI.accountMerge
+      | OperationResponseTypeI.inflation;
     account: string;
     to: string;
     from: string;
