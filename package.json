@@ -1,6 +1,6 @@
 {
   "name": "@abx/js-kinesis-sdk",
-  "version": "9.1.2-beta.6",
+  "version": "9.1.3-beta.6",
   "description": "stellar-sdk is a library for working with the Stellar Horizon server.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
