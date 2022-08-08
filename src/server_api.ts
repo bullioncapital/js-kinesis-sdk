@@ -336,7 +336,8 @@ export namespace ServerApi {
     | ClaimClaimableBalanceOperationRecord
     | BeginSponsoringFutureReservesOperationRecord
     | EndSponsoringFutureReservesOperationRecord
-    | RevokeSponsorshipOperationRecord;
+    | RevokeSponsorshipOperationRecord
+    | OnChainFeeOperationRecord;
 
   export namespace TradeRecord {
     interface Base extends Horizon.BaseResponse {
