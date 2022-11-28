@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@abx/js-kinesis-base@^6.0.6-beta.4":
-  version "6.0.6-beta.4"
-  resolved "https://registry.yarnpkg.com/@abx/js-kinesis-base/-/js-kinesis-base-6.0.6-beta.4.tgz#406bbaf1f168e94722b9c4f58c5695031701caf4"
-  integrity sha512-KEp3PKipDI3Ertu0Wimv17k1H9VExKWznAJ003gmtEwycdoXQPFPOk/NmtWzrOq7dSColJvRD8IhBH30texoZA==
+"@abx/js-kinesis-base@^7.0.0-beta.1":
+  version "7.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@abx/js-kinesis-base/-/js-kinesis-base-7.0.0-beta.1.tgz#b536f4287a55e86da49fda0d3d153a6e33427808"
+  integrity sha512-D5Cu71DIRSQyEEq90708EA49eg2QhVUhqA/6uDTNnM0jQzz/n6VWXkICg+keweJijdrLAU2j5Rxsz0bAt2yLhw==
   dependencies:
     base32.js "^0.1.0"
     bignumber.js "^4.0.0"
