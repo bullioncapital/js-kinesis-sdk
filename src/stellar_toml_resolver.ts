@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Networks } from "js-kinesis-base";
+import { Networks } from "@abx/js-kinesis-base";
 import toml from "toml";
 import { Config } from "./config";
 
