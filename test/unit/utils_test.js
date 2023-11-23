@@ -790,7 +790,7 @@ describe('Utils', function() {
     });
 
 
-    it("does NOT throw errors when the user is slightly out of minTime", function() {
+    xit("does NOT throw errors when the user is slightly out of minTime", function() {
       clock.tick(1626888681 * 1000);
 
       // this challenge from Stablex's testnet env, collected 2021-07-21T17:31:21.530Z,

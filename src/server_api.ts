@@ -1,4 +1,4 @@
-import { Asset } from "stellar-base";
+import { Asset } from "@abx/js-kinesis-base";
 import { Omit } from "utility-types";
 import { Horizon } from "./horizon_api";
 
@@ -149,6 +149,8 @@ export namespace ServerApi {
     max_tx_set_size: number;
     protocol_version: number;
     header_xdr: string;
+    base_percentage_fee: number;
+    max_fee: number;
     base_fee_in_stroops: number;
     base_reserve_in_stroops: number;
     /**
@@ -297,6 +299,27 @@ export namespace ServerApi {
       >,
       Horizon.RevokeSponsorshipOperationResponse {}
 
+  export interface OnChainFeeOperationRecord extends BaseOperationRecord {
+    type:
+      | OperationResponseType.createAccount
+      | OperationResponseType.payment
+      | OperationResponseType.accountMerge
+      | OperationResponseType.inflation;
+    type_i:
+      | OperationResponseTypeI.createAccount
+      | OperationResponseTypeI.payment
+      | OperationResponseTypeI.accountMerge
+      | OperationResponseTypeI.inflation;
+    account: string;
+    to: string;
+    from: string;
+    into: string;
+    funder: string;
+    amount: string;
+    starting_balance: string;
+    source_account: string;
+  }
+
   export type OperationRecord =
     | CreateAccountOperationRecord
     | PaymentOperationRecord
@@ -315,7 +338,8 @@ export namespace ServerApi {
     | ClaimClaimableBalanceOperationRecord
     | BeginSponsoringFutureReservesOperationRecord
     | EndSponsoringFutureReservesOperationRecord
-    | RevokeSponsorshipOperationRecord;
+    | RevokeSponsorshipOperationRecord
+    | OnChainFeeOperationRecord;
 
   export namespace TradeRecord {
     interface Base extends Horizon.BaseResponse {

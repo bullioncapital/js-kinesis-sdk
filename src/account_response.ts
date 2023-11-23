@@ -1,7 +1,7 @@
 /* tslint:disable:variable-name */
 
+import { Account as BaseAccount } from "@abx/js-kinesis-base";
 import forIn from "lodash/forIn";
-import { Account as BaseAccount } from "stellar-base";
 import { Horizon } from "./horizon_api";
 import { ServerApi } from "./server_api";
 

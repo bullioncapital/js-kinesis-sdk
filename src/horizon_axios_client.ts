@@ -25,7 +25,7 @@ export const SERVER_TIME_MAP: Record<string, ServerTime> = {};
 
 const HorizonAxiosClient = axios.create({
   headers: {
-    "X-Client-Name": "js-stellar-sdk",
+    "X-Client-Name": "js-kinesis-sdk",
     "X-Client-Version": version,
   },
 });

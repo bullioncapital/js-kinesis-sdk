@@ -1,5 +1,5 @@
 /* tslint:disable: variable-name */
-import { Asset } from "stellar-base";
+import { Asset } from "@abx/js-kinesis-base";
 import { CallBuilder } from "./call_builder";
 import { BadRequestError } from "./errors";
 import { Horizon } from "./horizon_api";
