@@ -2,9 +2,10 @@
 # yarn lockfile v1
 
 
-"@abx/js-kinesis-base@https://github.com/bullioncapital/js-kinesis-base.git#update-pkgs":
-  version "7.0.0-beta.1"
-  resolved "https://github.com/bullioncapital/js-kinesis-base.git#0c0d582107032bc49902575c3454b49177f2811c"
+"@abx/js-kinesis-base@7.1.0-beta.1":
+  version "7.1.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@abx/js-kinesis-base/-/js-kinesis-base-7.1.0-beta.1.tgz#a84070fae9833fa8ccdde60e820edf24597e3a11"
+  integrity sha512-RJDb2Dr+XVIgE+p/EFewDH6qaVVoxpcG//kYq39DawyL4DltkRgAeImqlnBIkyztSt0Zf+0aMK0ILztgu5GFfw==
   dependencies:
     "@stellar/js-xdr" "^3.1.1"
     base32.js "^0.1.0"
