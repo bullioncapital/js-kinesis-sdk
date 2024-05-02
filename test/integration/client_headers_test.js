@@ -2,6 +2,8 @@ const http = require("http");
 const url = require("url");
 const port = 3100;
 
+const versionPattern = /^[0-9]+\.[0-9]+\.[0-9]+(-[a-z]+(\.[0-9])?)?$/;
+
 describe("integration tests: client headers", function (done) {
   if (typeof window !== "undefined") {
     done();
@@ -13,9 +15,7 @@ describe("integration tests: client headers", function (done) {
 
     const requestHandler = (request, response) => {
       expect(request.headers["x-client-name"]).to.be.equal("js-kinesis-sdk");
-      expect(request.headers["x-client-version"]).to.match(
-        /^[0-9]+\.[0-9]+\.[0-9]+(-[a-z]+(\.[0-9])?)?$/,
-      );
+      expect(request.headers["x-client-version"]).to.match(versionPattern);
       response.end();
       server.close(() => done());
     };
@@ -41,10 +41,15 @@ describe("integration tests: client headers", function (done) {
       // eslint-disable-next-line node/no-deprecated-api
       let query = url.parse(request.url, true).query;
       expect(query["X-Client-Name"]).to.be.equal("js-stellar-sdk");
-      expect(query["X-Client-Version"]).to.match(
-        /^[0-9]+\.[0-9]+\.[0-9]+(-[a-z]+(\.[0-9])?)?$/,
-      );
+      expect(query["X-Client-Version"]).to.match(versionPattern);
+
+      // write a valid event stream so that we don't error prematurely
+      response.writeHead(200, {
+        "Content-Type": "text/event-stream",
+      });
+      response.write("retry: 10\nevent: close\ndata: byebye\n\n");
       response.end();
+
       server.close(() => {
         closeStream();
         done();
