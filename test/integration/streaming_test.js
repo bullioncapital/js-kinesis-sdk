@@ -2,13 +2,13 @@ const http = require("http");
 const url = require("url");
 const port = 3100;
 
-describe("integration tests: streaming", function(done) {
+describe("integration tests: streaming", function (done) {
   if (typeof window !== "undefined") {
     done();
     return;
   }
 
-  it("handles onerror", function(done) {
+  it("handles onerror", function (done) {
     let server;
     let closeStream;
 
@@ -40,7 +40,7 @@ describe("integration tests: streaming", function(done) {
     });
   });
 
-  it("handles close message", function(done) {
+  it("handles close message", function (done) {
     let server;
     let closeStream;
 
@@ -58,9 +58,9 @@ describe("integration tests: streaming", function(done) {
       });
 
       response.writeHead(200, {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive'
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
       });
       response.write("retry: 10\nevent: close\ndata: byebye\n\n");
     };
@@ -78,7 +78,7 @@ describe("integration tests: streaming", function(done) {
         .operations()
         .stream({
           onmessage: (m) => {
-            done("unexpected message "+JSON.stringify(m));
+            done("unexpected message " + JSON.stringify(m));
           },
           onerror: (err) => {
             done(err);
