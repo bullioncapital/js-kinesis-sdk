@@ -94,8 +94,8 @@ describe('ClaimableBalanceCallBuilder', function() {
         .sponsor('GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD')
         .call()
         .then(function(response) {
-          expect(response.next).to.be.function;
-          expect(response.prev).to.be.function;
+          expect(response.next).to.be.a("function");
+          expect(response.prev).to.be.a("function");
           done();
         })
         .catch(function(err) {
@@ -138,8 +138,8 @@ describe('ClaimableBalanceCallBuilder', function() {
         .claimant('GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD')
         .call()
         .then(function(response) {
-          expect(response.next).to.be.function;
-          expect(response.prev).to.be.function;
+          expect(response.next).to.be.a("function");
+          expect(response.prev).to.be.a("function");
           done();
         })
         .catch(function(err) {
@@ -182,8 +182,8 @@ describe('ClaimableBalanceCallBuilder', function() {
         .asset(new StellarSdk.Asset('USD','GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD'))
         .call()
         .then(function(response) {
-          expect(response.next).to.be.function;
-          expect(response.prev).to.be.function;
+          expect(response.next).to.be.a("function");
+          expect(response.prev).to.be.a("function");
           done();
         })
         .catch(function(err) {

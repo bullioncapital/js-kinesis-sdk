@@ -332,11 +332,11 @@ describe('server.js non-transaction tests', function() {
             'GBAH7FQMC3CZJ4WD6GE7G7YXCIU36LC2IHXQ7D5MQAUO4PODOWIVLSFS'
           );
           expect(response.subentry_count).to.be.equal(5);
-          expect(response.transactions).to.be.function;
-          expect(response.operations).to.be.function;
-          expect(response.payments).to.be.function;
-          expect(response.effects).to.be.function;
-          expect(response.offers).to.be.function;
+          expect(response.transactions).to.be.a("function");
+          expect(response.operations).to.be.a("function");
+          expect(response.payments).to.be.a("function");
+          expect(response.effects).to.be.a("function");
+          expect(response.offers).to.be.a("function");
           expect(Object.keys(response.flags).length).to.be.equal(4);
           // AccountResponse methods
           expect(response.sequenceNumber()).to.be.equal('5387216134078475');
@@ -417,8 +417,8 @@ describe('server.js non-transaction tests', function() {
               expect(response.records).to.be.deep.equal(
                 ledgersResponse._embedded.records
               );
-              expect(response.next).to.be.function;
-              expect(response.prev).to.be.function;
+              expect(response.next).to.be.a("function");
+              expect(response.prev).to.be.a("function");
               done();
             })
             .catch(function(err) {
@@ -450,8 +450,8 @@ describe('server.js non-transaction tests', function() {
               expect(response.records).to.be.deep.equal(
                 ledgersResponse._embedded.records
               );
-              expect(response.next).to.be.function;
-              expect(response.prev).to.be.function;
+              expect(response.next).to.be.a("function");
+              expect(response.prev).to.be.a("function");
               done();
             });
         });
@@ -477,8 +477,8 @@ describe('server.js non-transaction tests', function() {
                 expect(response.records).to.be.deep.equal(
                   ledgersResponse._embedded.records
                 );
-                expect(response.next).to.be.function;
-                expect(response.prev).to.be.function;
+                expect(response.next).to.be.a("function");
+                expect(response.prev).to.be.a("function");
                 done();
               });
             });
@@ -701,10 +701,10 @@ describe('server.js non-transaction tests', function() {
               expect(response.records).to.be.deep.equal(
                 transactionsResponse._embedded.records
               );
-              expect(response.records[0].ledger).to.be.function;
+              expect(response.records[0].ledger).to.be.a("function");
               expect(response.records[0].ledger_attr).to.be.equal(7952722);
-              expect(response.next).to.be.function;
-              expect(response.prev).to.be.function;
+              expect(response.next).to.be.a("function");
+              expect(response.prev).to.be.a("function");
 
               response.records[0]
                 .operations()
@@ -752,8 +752,8 @@ describe('server.js non-transaction tests', function() {
               expect(response.records).to.be.deep.equal(
                 transactionsResponse._embedded.records
               );
-              expect(response.next).to.be.function;
-              expect(response.prev).to.be.function;
+              expect(response.next).to.be.a("function");
+              expect(response.prev).to.be.a("function");
               response.records[0]
                 .operations({ limit: 1 })
                 .then(function(response) {
@@ -1039,8 +1039,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               transactionsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -1249,8 +1249,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               accountsForSignerResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -1373,8 +1373,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               accountsForAssetResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -1500,8 +1500,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               accountsForSponsor._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -1649,8 +1649,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               accountsForAssetResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -1697,8 +1697,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               offersResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -1754,7 +1754,7 @@ describe('server.js non-transaction tests', function() {
             expect(response).to.be.deep.equal(
               offerResponse
             );
-            expect(response.self).to.be.function;
+            expect(response.self).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -1781,8 +1781,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               offersResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -1813,8 +1813,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               offersResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -1845,8 +1845,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               offersResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -1872,8 +1872,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               offersResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -2630,8 +2630,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               pathsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -2675,8 +2675,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               pathsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -2781,8 +2781,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               pathsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -2826,8 +2826,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               pathsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -2892,8 +2892,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               effectsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -2921,8 +2921,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               effectsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -2950,8 +2950,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               effectsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -3038,8 +3038,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               operationsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -3067,8 +3067,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               operationsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -3096,8 +3096,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               operationsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -3123,8 +3123,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               operationsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -3150,8 +3150,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               operationsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -3229,8 +3229,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               paymentsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -3256,8 +3256,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               paymentsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -3285,8 +3285,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               paymentsResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -3404,8 +3404,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               tradeAggregationResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {
@@ -3440,8 +3440,8 @@ describe('server.js non-transaction tests', function() {
             expect(response.records).to.be.deep.equal(
               tradeAggregationResponse._embedded.records
             );
-            expect(response.next).to.be.function;
-            expect(response.prev).to.be.function;
+            expect(response.next).to.be.a("function");
+            expect(response.prev).to.be.a("function");
             done();
           })
           .catch(function(err) {

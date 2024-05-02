@@ -171,7 +171,7 @@ describe("Server - CallBuilder#join", function() {
         .call()
         .then((response) => {
           const record = response.records[0];
-          expect(record.transaction).to.be.function;
+          expect(record.transaction).to.be.a("function");
 
           record.transaction().then((transaction) => {
             expect(transaction).to.deep.equal(transaction);

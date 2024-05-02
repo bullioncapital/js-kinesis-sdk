@@ -45,7 +45,13 @@ describe("integration tests: streaming", function(done) {
     let closeStream;
 
     const requestHandler = (request, response) => {
-      request.on("close", (e) => {
+      // the streamer will retry indefinitely (by design), so we want to ensure
+      // that the test is only completed once
+      if (!server.listening) {
+        return;
+      }
+
+      request.once("close", (e) => {
         closeStream();
         server.close();
         done();
