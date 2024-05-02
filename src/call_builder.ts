@@ -1,4 +1,3 @@
-import isNode from "detect-node";
 import URI from "urijs";
 import URITemplate from "urijs/src/URITemplate";
 
@@ -22,17 +21,12 @@ export interface EventSourceOptions<T> {
   reconnectTimeout?: number;
 }
 
-let EventSource: Constructable<EventSource>;
 const anyGlobal = global as any;
-
-if (anyGlobal.EventSource) {
-  EventSource = anyGlobal.EventSource;
-} else if (isNode) {
-  /* tslint:disable-next-line:no-var-requires */
-  EventSource = require("eventsource");
-} else {
-  EventSource = anyGlobal.window.EventSource;
-}
+// require("eventsource") for Node and React Native environment
+let EventSource: Constructable<EventSource> =
+  anyGlobal.EventSource ??
+  anyGlobal.window?.EventSource ??
+  require("eventsource");
 
 /**
  * Creates a new {@link CallBuilder} pointed to server defined by serverUrl.
@@ -45,7 +39,7 @@ export class CallBuilder<
   T extends
     | Horizon.FeeStatsResponse
     | Horizon.BaseResponse
-    | ServerApi.CollectionPage<Horizon.BaseResponse>
+    | ServerApi.CollectionPage<Horizon.BaseResponse>,
 > {
   protected url: URI;
   public filter: string[][];
@@ -66,7 +60,7 @@ export class CallBuilder<
   public call(): Promise<T> {
     this.checkFilter();
     return this._sendNormalRequest(this.url).then((r) =>
-      this._parseResponse(r),
+      this._parseResponse(r)
     );
   }
   //// TODO: Migrate to async, BUT that's a change in behavior and tests "rejects two filters" will fail.
@@ -112,19 +106,22 @@ export class CallBuilder<
     let timeout: NodeJS.Timeout;
 
     const createTimeout = () => {
-      timeout = setTimeout(() => {
-        if (es) {
-          es.close();
-        }
-        /* tslint:disable-next-line:no-use-before-declare */
-        es = createEventSource();
-      }, options.reconnectTimeout || 15 * 1000);
+      timeout = setTimeout(
+        () => {
+          if (es) {
+            es.close();
+          }
+          /* tslint:disable-next-line:no-use-before-declare */
+          es = createEventSource();
+        },
+        options.reconnectTimeout || 15 * 1000
+      );
     };
 
     const createEventSource = () => {
       try {
         es = new EventSource(this.url.toString());
-      } catch (err) {
+      } catch (err: any) {
         if (options.onerror) {
           options.onerror(err);
         }
@@ -406,11 +403,11 @@ export class CallBuilder<
       switch (error.response.status) {
         case 404:
           return Promise.reject(
-            new NotFoundError(error.response.statusText, error.response.data),
+            new NotFoundError(error.response.statusText, error.response.data)
           );
         default:
           return Promise.reject(
-            new NetworkError(error.response.statusText, error.response.data),
+            new NetworkError(error.response.statusText, error.response.data)
           );
       }
     } else {
