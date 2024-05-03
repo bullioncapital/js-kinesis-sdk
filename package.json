@@ -134,7 +134,6 @@
     "randombytes": "^2.1.0",
     "sinon": "^17.0.1",
     "sinon-chai": "^3.7.0",
-    "taffydb": "^2.7.3",
     "terser-webpack-plugin": "^5.3.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3",
@@ -142,14 +141,12 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "@abx/js-kinesis-base": "7.1.0-beta.1",
+    "@abx/js-kinesis-base": "7.1.0-beta.2",
     "axios": "^1.6.8",
     "bignumber.js": "^9.1.2",
     "eventsource": "^2.0.2",
-    "lodash": "^4.17.21",
     "randombytes": "^2.1.0",
     "toml": "^3.0.0",
-    "urijs": "^1.19.1",
-    "utility-types": "^3.7.0"
+    "urijs": "^1.19.1"
   }
 }

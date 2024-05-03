@@ -1,5 +1,4 @@
 import { Asset } from "@abx/js-kinesis-base";
-import { Omit } from "utility-types";
 import { Horizon } from "./horizon_api";
 
 // more types
@@ -15,7 +14,7 @@ export namespace ServerApi {
   export type AccountRecordSigners = AccountRecordSignersType;
   export type AssetRecord = AssetRecordType;
   export interface CollectionPage<
-    T extends Horizon.BaseResponse = Horizon.BaseResponse
+    T extends Horizon.BaseResponse = Horizon.BaseResponse,
   > {
     records: T[];
     next: () => Promise<CollectionPage<T>>;
@@ -29,10 +28,10 @@ export namespace ServerApi {
   }
 
   export type CallFunction<
-    T extends Horizon.BaseResponse = Horizon.BaseResponse
+    T extends Horizon.BaseResponse = Horizon.BaseResponse,
   > = () => Promise<T>;
   export type CallCollectionFunction<
-    T extends Horizon.BaseResponse = Horizon.BaseResponse
+    T extends Horizon.BaseResponse = Horizon.BaseResponse,
   > = (options?: CallFunctionTemplateOptions) => Promise<CollectionPage<T>>;
 
   type BaseEffectRecordFromTypes =
@@ -176,7 +175,7 @@ export namespace ServerApi {
   import OperationResponseTypeI = Horizon.OperationResponseTypeI;
   export interface BaseOperationRecord<
     T extends OperationResponseType = OperationResponseType,
-    TI extends OperationResponseTypeI = OperationResponseTypeI
+    TI extends OperationResponseTypeI = OperationResponseTypeI,
   > extends Horizon.BaseOperationResponse<T, TI> {
     self: CallFunction<OperationRecord>;
     succeeds: CallFunction<OperationRecord>;
