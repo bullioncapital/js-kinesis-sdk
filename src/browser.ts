@@ -1,7 +1,8 @@
 /* tslint:disable:no-var-requires */
+export * from "./index";
+export * as StellarBase from "@abx/js-kinesis-base";
 
-module.exports = require("./index");
-module.exports.axios = require("axios");
-module.exports.StellarBase = require("@abx/js-kinesis-base");
+import axios from "axios"; // idk why axios is weird
+export { axios };
 
-export {};
+export default module.exports;

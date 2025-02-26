@@ -1,7 +1,7 @@
 const http = require("http");
 
-describe("federation-server.js tests", function() {
-  beforeEach(function() {
+describe("federation-server.js tests", function () {
+  beforeEach(function () {
     this.server = new StellarSdk.FederationServer(
       "https://acme.com:1337/federation",
       "stellar.org",
@@ -10,13 +10,13 @@ describe("federation-server.js tests", function() {
     StellarSdk.Config.setDefault();
   });
 
-  afterEach(function() {
+  afterEach(function () {
     this.axiosMock.verify();
     this.axiosMock.restore();
   });
 
-  describe("FederationServer.constructor", function() {
-    it("throws error for insecure server", function() {
+  describe("FederationServer.constructor", function () {
+    it("throws error for insecure server", function () {
       expect(
         () =>
           new StellarSdk.FederationServer(
@@ -26,7 +26,7 @@ describe("federation-server.js tests", function() {
       ).to.throw(/Cannot connect to insecure federation server/);
     });
 
-    it("allow insecure server when opts.allowHttp flag is set", function() {
+    it("allow insecure server when opts.allowHttp flag is set", function () {
       expect(
         () =>
           new StellarSdk.FederationServer(
@@ -37,7 +37,7 @@ describe("federation-server.js tests", function() {
       ).to.not.throw();
     });
 
-    it("allow insecure server when global Config.allowHttp flag is set", function() {
+    it("allow insecure server when global Config.allowHttp flag is set", function () {
       StellarSdk.Config.setAllowHttp(true);
       expect(
         () =>
@@ -50,8 +50,8 @@ describe("federation-server.js tests", function() {
     });
   });
 
-  describe("FederationServer.resolveAddress", function() {
-    beforeEach(function() {
+  describe("FederationServer.resolveAddress", function () {
+    beforeEach(function () {
       this.axiosMock
         .expects("get")
         .withArgs(
@@ -70,7 +70,7 @@ describe("federation-server.js tests", function() {
         );
     });
 
-    it("requests is correct", function(done) {
+    it("requests is correct", function (done) {
       this.server
         .resolveAddress("bob*stellar.org")
         .then((response) => {
@@ -80,12 +80,12 @@ describe("federation-server.js tests", function() {
           );
           done();
         })
-        .catch(function(err) {
+        .catch(function (err) {
           done(err);
         });
     });
 
-    it("requests is correct for username as stellar address", function(done) {
+    it("requests is correct for username as stellar address", function (done) {
       this.server
         .resolveAddress("bob")
         .then((response) => {
@@ -95,14 +95,14 @@ describe("federation-server.js tests", function() {
           );
           done();
         })
-        .catch(function(err) {
+        .catch(function (err) {
           done(err);
         });
     });
   });
 
-  describe("FederationServer.resolveAccountId", function() {
-    beforeEach(function() {
+  describe("FederationServer.resolveAccountId", function () {
+    beforeEach(function () {
       this.axiosMock
         .expects("get")
         .withArgs(
@@ -121,7 +121,7 @@ describe("federation-server.js tests", function() {
         );
     });
 
-    it("requests is correct", function(done) {
+    it("requests is correct", function (done) {
       this.server
         .resolveAccountId(
           "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
@@ -133,14 +133,14 @@ describe("federation-server.js tests", function() {
           );
           done();
         })
-        .catch(function(err) {
+        .catch(function (err) {
           done(err);
         });
     });
   });
 
-  describe("FederationServer.resolveTransactionId", function() {
-    beforeEach(function() {
+  describe("FederationServer.resolveTransactionId", function () {
+    beforeEach(function () {
       this.axiosMock
         .expects("get")
         .withArgs(
@@ -159,7 +159,7 @@ describe("federation-server.js tests", function() {
         );
     });
 
-    it("requests is correct", function(done) {
+    it("requests is correct", function (done) {
       this.server
         .resolveTransactionId(
           "3389e9f0f1a65f19736cacf544c2e825313e8447f569233bb8db39aa607c8889",
@@ -171,14 +171,14 @@ describe("federation-server.js tests", function() {
           );
           done();
         })
-        .catch(function(err) {
+        .catch(function (err) {
           done(err);
         });
     });
   });
 
-  describe("FederationServer.createForDomain", function() {
-    it("creates correct object", function(done) {
+  describe("FederationServer.createForDomain", function () {
+    it("creates correct object", function (done) {
       this.axiosMock
         .expects("get")
         .withArgs(sinon.match("https://acme.com/.well-known/stellar.toml"))
@@ -205,7 +205,7 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
       );
     });
 
-    it("fails when stellar.toml does not contain federation server info", function(done) {
+    it("fails when stellar.toml does not contain federation server info", function (done) {
       this.axiosMock
         .expects("get")
         .withArgs(sinon.match("https://acme.com/.well-known/stellar.toml"))
@@ -223,8 +223,8 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
     });
   });
 
-  describe("FederationServer.resolve", function() {
-    it("succeeds for a valid account ID", function(done) {
+  describe("FederationServer.resolve", function () {
+    it("succeeds for a valid account ID", function (done) {
       StellarSdk.FederationServer.resolve(
         "GAFSZ3VPBC2H2DVKCEWLN3PQWZW6BVDMFROWJUDAJ3KWSOKQIJ4R5W4J",
       )
@@ -235,13 +235,13 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
         .notify(done);
     });
 
-    it("fails for invalid account ID", function(done) {
+    it("fails for invalid account ID", function (done) {
       StellarSdk.FederationServer.resolve("invalid")
         .should.be.rejectedWith(/Invalid Account ID/)
         .notify(done);
     });
 
-    it("succeeds for a valid Stellar address", function(done) {
+    it("succeeds for a valid Stellar address", function (done) {
       this.axiosMock
         .expects("get")
         .withArgs(sinon.match("https://stellar.org/.well-known/stellar.toml"))
@@ -285,13 +285,13 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
         .notify(done);
     });
 
-    it("fails for invalid Stellar address", function(done) {
+    it("fails for invalid Stellar address", function (done) {
       StellarSdk.FederationServer.resolve("bob*stellar.org*test")
         .should.be.rejectedWith(/Invalid Stellar address/)
         .notify(done);
     });
 
-    it("fails when memo is not string", function(done) {
+    it("fails when memo is not string", function (done) {
       this.axiosMock
         .expects("get")
         .withArgs(
@@ -317,7 +317,7 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
         .notify(done);
     });
 
-    it("fails when response exceeds the limit", function(done) {
+    it("fails when response exceeds the limit", function (done) {
       // Unable to create temp server in a browser
       if (typeof window != "undefined") {
         return done();
@@ -346,8 +346,8 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
     });
   });
 
-  describe("FederationServer times out when response lags and timeout set", function() {
-    afterEach(function() {
+  describe("FederationServer times out when response lags and timeout set", function () {
+    afterEach(function () {
       StellarSdk.Config.setDefault();
     });
 
@@ -362,7 +362,7 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
         message = "with instance opts set";
       }
 
-      it(`resolveAddress times out ${message}`, function(done) {
+      it(`resolveAddress times out ${message}`, function (done) {
         // Unable to create temp server in a browser
         if (typeof window != "undefined") {
           return done();
@@ -385,7 +385,7 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
           });
       });
 
-      it(`resolveAccountId times out ${message}`, function(done) {
+      it(`resolveAccountId times out ${message}`, function (done) {
         // Unable to create temp server in a browser
         if (typeof window != "undefined") {
           return done();
@@ -409,7 +409,7 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
           });
       });
 
-      it(`resolveTransactionId times out ${message}`, function(done) {
+      it(`resolveTransactionId times out ${message}`, function (done) {
         // Unable to create temp server in a browser
         if (typeof window != "undefined") {
           return done();
@@ -433,7 +433,7 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
           });
       });
 
-      it(`createForDomain times out ${message}`, function(done) {
+      it(`createForDomain times out ${message}`, function (done) {
         // Unable to create temp server in a browser
         if (typeof window != "undefined") {
           return done();
@@ -450,7 +450,7 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
           });
       });
 
-      it(`resolve times out ${message}`, function(done) {
+      it(`resolve times out ${message}`, function (done) {
         // Unable to create temp server in a browser
         if (typeof window != "undefined") {
           return done();

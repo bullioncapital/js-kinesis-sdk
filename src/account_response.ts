@@ -1,7 +1,6 @@
 /* tslint:disable:variable-name */
 
 import { Account as BaseAccount } from "@abx/js-kinesis-base";
-import forIn from "lodash/forIn";
 import { Horizon } from "./horizon_api";
 import { ServerApi } from "./server_api";
 
@@ -36,28 +35,18 @@ export class AccountResponse {
     value: string;
   }) => Promise<{ value: string }>;
   public readonly data_attr!: Record<string, string>;
-  public readonly effects!: ServerApi.CallCollectionFunction<
-    ServerApi.EffectRecord
-  >;
-  public readonly offers!: ServerApi.CallCollectionFunction<
-    ServerApi.OfferRecord
-  >;
-  public readonly operations!: ServerApi.CallCollectionFunction<
-    ServerApi.OperationRecord
-  >;
-  public readonly payments!: ServerApi.CallCollectionFunction<
-    ServerApi.PaymentOperationRecord
-  >;
-  public readonly trades!: ServerApi.CallCollectionFunction<
-    ServerApi.TradeRecord
-  >;
+  public readonly effects!: ServerApi.CallCollectionFunction<ServerApi.EffectRecord>;
+  public readonly offers!: ServerApi.CallCollectionFunction<ServerApi.OfferRecord>;
+  public readonly operations!: ServerApi.CallCollectionFunction<ServerApi.OperationRecord>;
+  public readonly payments!: ServerApi.CallCollectionFunction<ServerApi.PaymentOperationRecord>;
+  public readonly trades!: ServerApi.CallCollectionFunction<ServerApi.TradeRecord>;
   private readonly _baseAccount: BaseAccount;
 
   constructor(response: ServerApi.AccountRecord) {
     this._baseAccount = new BaseAccount(response.account_id, response.sequence);
     // Extract response fields
     // TODO: do it in type-safe manner.
-    forIn(response, (value, key) => {
+    Object.entries(response).forEach(([key, value]) => {
       (this as any)[key] = value;
     });
   }

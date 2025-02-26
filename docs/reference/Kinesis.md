@@ -3,26 +3,8 @@ title: Basic Examples
 ---
 # Kinesis SDK Example
 
-`@abx/js-kinesis-sdk` is published as private package. Hence, you need to configure your `.npmrc` as follow:
+`npm install @abx/js-kinesis-sdk`
 
-```
-# .npmrc
-@abx:registry=https://registry.npmjs.org/
-//registry.npmjs.org/:_authToken=${NPM_TOKEN}
-```
-
-Then `npm install @abx/js-kinesis-sdk@9.1.0-beta.5`
-
-- [Creating a payment Transaction](#creating-a-payment-transaction)
-- [Loading an account's transaction history](#loading-an-accounts-transaction-history)
-- [Streaming payment events](#streaming-payment-events)
-
-
-## Breaking Change
-
-- `Network.use()` is no longer supported
-- `Network.current()` is not longer supported
-- If you code relied read `TransactionResponse` and making use of `fee_paid` beware later version horizon renamed `fee_paid` to `fee_charged` a recommend work around is to secure your retrieval logic like so `(transaction["fee_paid"] || transaction.fee_charged)`
 ## Server
 
 ```javascript
@@ -36,7 +18,33 @@ const server = new KinesisSdk.Server('https://kag-testnet.kinesisgroup.io', {
 
 // Right now, there's built-in function for fetching base fee.
 // it relies on `v1` feature flag when we create a new server object.
-const fee = await server.fetchBaseFee();
+const baseFee = await server.fetchBaseFee();
+```
+Kinesis Blockchain Networks:
+
+| Fiat Asset | Asset Code | Environment | Network Passphrase | Horizon Server                      |
+| ---------- | ---------- | ----------- | ------------------ | ----------------------------------- |
+| GOLD       | KAU        | Mainnet     | Kinesis Live       | https://kau-mainnet.kinesisgroup.io |
+| SILVER     | KAG        | Mainnet     | Kinesis KAG Live   | https://kag-mainnet.kinesisgroup.io |
+| GOLD       | TKAU       | Testnet     | Kinesis UAT        | https://kau-testnet.kinesisgroup.io |
+| SILVER     | TKAG       | Testnet     | Kinesis KAG UAT    | https://kag-testnet.kinesisgroup.io |
+
+## Fee Calculation
+
+For Create and Payment Operations, there are additional fee charged on top of base fee. Here is the formular used to calculate transaction fee that include on or both operations. If your transaction doesn't include one of operations you can use simple formular `BASE_FEE_IN_STROOP * NUMBER_OF_OPERATIONS`.
+
+```javascript
+const STROOPS_IN_ONE_KINESIS    = 	10000000
+const BASE_PERCENTAGE_FEE       =	45
+const BASE_FEE_IN_STROOP        =	100
+const BASIS_POINTS_TO_PERCENT   =	10000
+const NUMBER_OF_OPERATIONS      =	1
+
+function getTxFee(amount) {
+  const TX_PERCENTAGE_FEE = amount * BASE_PERCENTAGE_FEE / BASIS_POINTS_TO_PERCENT
+  const fee = (TX_PERCENTAGE_FEE * STROOPS_IN_ONE_KINESIS)  + (BASE_FEE_IN_STROOP * NUMBER_OF_OPERATIONS)
+  return fee.toString()
+}
 ```
 
 ## TransactionBuilder
@@ -87,9 +95,12 @@ const server = new KinesisSdk.Server('https://kag-testnet.kinesisgroup.io', {
   // We can fetch the current sequence number for the source account from Horizon.
   const account = await server.loadAccount(sourcePublicKey);
 
-  // Right now, there's one function that fetches the base fee.
-  // In the future, we'll have functions that are smarter about suggesting fees.
-  const fee = await server.fetchBaseFee();
+  // Specify 350.1234567 lumens. Lumens are divisible to seven digits past
+  // the decimal. They are represented in JS Kinesis SDK in string format
+  // to avoid errors from the use of the JavaScript Number data structure.
+  const amount = '350.1234567'
+
+  const fee = getTxFee(amount)
 
   const transaction = new KinesisSdk.TransactionBuilder(account, {
       fee,
@@ -101,10 +112,7 @@ const server = new KinesisSdk.Server('https://kag-testnet.kinesisgroup.io', {
       destination: receiverPublicKey,
       // The term native asset refers to lumens
       asset: KinesisSdk.Asset.native(),
-      // Specify 350.1234567 lumens. Lumens are divisible to seven digits past
-      // the decimal. They are represented in JS Kinesis SDK in string format
-      // to avoid errors from the use of the JavaScript Number data structure.
-      amount: '350.1234567',
+      amount,
     }))
     // Make this transaction valid for the next 30 seconds only
     .setTimeout(30)

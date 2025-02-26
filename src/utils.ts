@@ -11,7 +11,6 @@ import {
   Transaction,
   TransactionBuilder,
 } from "@abx/js-kinesis-base";
-import clone from "lodash/clone";
 import randomBytes from "randombytes";
 import { InvalidSep10ChallengeError } from "./errors";
 import { ServerApi } from "./server_api";
@@ -52,7 +51,7 @@ export namespace Utils {
     webAuthDomain: string,
     memo: string | null = null,
     clientDomain: string | null = null,
-    clientSigningKey: string | null = null,
+    clientSigningKey: string | null = null
   ): string {
     if (clientAccountID.startsWith("M") && memo) {
       throw Error("memo cannot be used if clientAccountID is a muxed account");
@@ -81,14 +80,14 @@ export namespace Utils {
           name: `${homeDomain} auth`,
           value,
           source: clientAccountID,
-        }),
+        })
       )
       .addOperation(
         Operation.manageData({
           name: "web_auth_domain",
           value: webAuthDomain,
           source: account.accountId(),
-        }),
+        })
       );
 
     if (clientDomain) {
@@ -100,7 +99,7 @@ export namespace Utils {
           name: `client_domain`,
           value: clientDomain,
           source: clientSigningKey,
-        }),
+        })
       );
     }
 
@@ -111,10 +110,7 @@ export namespace Utils {
     const transaction = builder.build();
     transaction.sign(serverKeypair);
 
-    return transaction
-      .toEnvelope()
-      .toXDR("base64")
-      .toString();
+    return transaction.toEnvelope().toXDR("base64").toString();
   }
 
   /**
@@ -144,7 +140,7 @@ export namespace Utils {
     serverAccountID: string,
     networkPassphrase: string,
     homeDomains: string | string[],
-    webAuthDomain: string,
+    webAuthDomain: string
   ): {
     tx: Transaction;
     clientAccountID: string;
@@ -153,7 +149,7 @@ export namespace Utils {
   } {
     if (serverAccountID.startsWith("M")) {
       throw Error(
-        "Invalid serverAccountID: multiplexed accounts are not supported.",
+        "Invalid serverAccountID: multiplexed accounts are not supported."
       );
     }
 
@@ -165,11 +161,11 @@ export namespace Utils {
         transaction = new FeeBumpTransaction(challengeTx, networkPassphrase);
       } catch {
         throw new InvalidSep10ChallengeError(
-          "Invalid challenge: unable to deserialize challengeTx transaction string",
+          "Invalid challenge: unable to deserialize challengeTx transaction string"
         );
       }
       throw new InvalidSep10ChallengeError(
-        "Invalid challenge: expected a Transaction but received a FeeBumpTransaction",
+        "Invalid challenge: expected a Transaction but received a FeeBumpTransaction"
       );
     }
 
@@ -178,21 +174,21 @@ export namespace Utils {
 
     if (sequence !== 0) {
       throw new InvalidSep10ChallengeError(
-        "The transaction sequence number should be zero",
+        "The transaction sequence number should be zero"
       );
     }
 
     // verify transaction source
     if (transaction.source !== serverAccountID) {
       throw new InvalidSep10ChallengeError(
-        "The transaction source account is not equal to the server's account",
+        "The transaction source account is not equal to the server's account"
       );
     }
 
     // verify operation
     if (transaction.operations.length < 1) {
       throw new InvalidSep10ChallengeError(
-        "The transaction should contain at least one operation",
+        "The transaction should contain at least one operation"
       );
     }
 
@@ -200,7 +196,7 @@ export namespace Utils {
 
     if (!operation.source) {
       throw new InvalidSep10ChallengeError(
-        "The transaction's operation should contain a source account",
+        "The transaction's operation should contain a source account"
       );
     }
     const clientAccountID: string = operation.source!;
@@ -209,12 +205,12 @@ export namespace Utils {
     if (transaction.memo.type !== MemoNone) {
       if (clientAccountID.startsWith("M")) {
         throw new InvalidSep10ChallengeError(
-          "The transaction has a memo but the client account ID is a muxed account",
+          "The transaction has a memo but the client account ID is a muxed account"
         );
       }
       if (transaction.memo.type !== MemoID) {
         throw new InvalidSep10ChallengeError(
-          "The transaction's memo must be of type `id`",
+          "The transaction's memo must be of type `id`"
         );
       }
       memo = transaction.memo.value as string;
@@ -222,7 +218,7 @@ export namespace Utils {
 
     if (operation.type !== "manageData") {
       throw new InvalidSep10ChallengeError(
-        "The transaction's operation type should be 'manageData'",
+        "The transaction's operation type should be 'manageData'"
       );
     }
 
@@ -232,7 +228,7 @@ export namespace Utils {
       Number.parseInt(transaction.timeBounds?.maxTime, 10) === TimeoutInfinite
     ) {
       throw new InvalidSep10ChallengeError(
-        "The transaction requires non-infinite timebounds",
+        "The transaction requires non-infinite timebounds"
       );
     }
 
@@ -243,27 +239,27 @@ export namespace Utils {
 
     if (operation.value === undefined) {
       throw new InvalidSep10ChallengeError(
-        "The transaction's operation values should not be null",
+        "The transaction's operation values should not be null"
       );
     }
 
     // verify base64
     if (!operation.value) {
       throw new InvalidSep10ChallengeError(
-        "The transaction's operation value should not be null",
+        "The transaction's operation value should not be null"
       );
     }
 
     if (Buffer.from(operation.value.toString(), "base64").length !== 48) {
       throw new InvalidSep10ChallengeError(
-        "The transaction's operation value should be a 64 bytes base64 random string",
+        "The transaction's operation value should be a 64 bytes base64 random string"
       );
     }
 
     // verify homeDomains
     if (!homeDomains) {
       throw new InvalidSep10ChallengeError(
-        "Invalid homeDomains: a home domain must be provided for verification",
+        "Invalid homeDomains: a home domain must be provided for verification"
       );
     }
 
@@ -275,17 +271,17 @@ export namespace Utils {
       }
     } else if (Array.isArray(homeDomains)) {
       matchedHomeDomain = homeDomains.find(
-        (domain) => `${domain} auth` === operation.name,
+        (domain) => `${domain} auth` === operation.name
       );
     } else {
       throw new InvalidSep10ChallengeError(
-        `Invalid homeDomains: homeDomains type is ${typeof homeDomains} but should be a string or an array`,
+        `Invalid homeDomains: homeDomains type is ${typeof homeDomains} but should be a string or an array`
       );
     }
 
     if (!matchedHomeDomain) {
       throw new InvalidSep10ChallengeError(
-        "Invalid homeDomains: the transaction's operation key name does not match the expected home domain",
+        "Invalid homeDomains: the transaction's operation key name does not match the expected home domain"
       );
     }
 
@@ -293,23 +289,23 @@ export namespace Utils {
     for (const op of subsequentOperations) {
       if (op.type !== "manageData") {
         throw new InvalidSep10ChallengeError(
-          "The transaction has operations that are not of type 'manageData'",
+          "The transaction has operations that are not of type 'manageData'"
         );
       }
       if (op.source !== serverAccountID && op.name !== "client_domain") {
         throw new InvalidSep10ChallengeError(
-          "The transaction has operations that are unrecognized",
+          "The transaction has operations that are unrecognized"
         );
       }
       if (op.name === "web_auth_domain") {
         if (op.value === undefined) {
           throw new InvalidSep10ChallengeError(
-            "'web_auth_domain' operation value should not be null",
+            "'web_auth_domain' operation value should not be null"
           );
         }
         if (op.value.compare(Buffer.from(webAuthDomain))) {
           throw new InvalidSep10ChallengeError(
-            `'web_auth_domain' operation value does not match ${webAuthDomain}`,
+            `'web_auth_domain' operation value does not match ${webAuthDomain}`
           );
         }
       }
@@ -317,7 +313,7 @@ export namespace Utils {
 
     if (!verifyTxSignedBy(transaction, serverAccountID)) {
       throw new InvalidSep10ChallengeError(
-        `Transaction not signed by server: '${serverAccountID}'`,
+        `Transaction not signed by server: '${serverAccountID}'`
       );
     }
 
@@ -403,7 +399,7 @@ export namespace Utils {
     threshold: number,
     signerSummary: ServerApi.AccountRecordSigners[],
     homeDomains: string | string[],
-    webAuthDomain: string,
+    webAuthDomain: string
   ): string[] {
     const signers = signerSummary.map((signer) => signer.key);
 
@@ -413,7 +409,7 @@ export namespace Utils {
       networkPassphrase,
       signers,
       homeDomains,
-      webAuthDomain,
+      webAuthDomain
     );
 
     let weight = 0;
@@ -425,7 +421,7 @@ export namespace Utils {
 
     if (weight < threshold) {
       throw new InvalidSep10ChallengeError(
-        `signers with weight ${weight} do not meet threshold ${threshold}"`,
+        `signers with weight ${weight} do not meet threshold ${threshold}"`
       );
     }
 
@@ -495,7 +491,7 @@ export namespace Utils {
     networkPassphrase: string,
     signers: string[],
     homeDomains: string | string[],
-    webAuthDomain: string,
+    webAuthDomain: string
   ): string[] {
     // Read the transaction which validates its structure.
     const { tx } = readChallengeTx(
@@ -503,17 +499,17 @@ export namespace Utils {
       serverAccountID,
       networkPassphrase,
       homeDomains,
-      webAuthDomain,
+      webAuthDomain
     );
 
     // Ensure the server account ID is an address and not a seed.
     let serverKP: Keypair;
     try {
       serverKP = Keypair.fromPublicKey(serverAccountID); // can throw 'Invalid Stellar public key'
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(
         "Couldn't infer keypair from the provided 'serverAccountID': " +
-          err.message,
+          err.message
       );
     }
 
@@ -541,7 +537,7 @@ export namespace Utils {
     // Don't continue if none of the signers provided are in the final list.
     if (clientSigners.size === 0) {
       throw new InvalidSep10ChallengeError(
-        "No verifiable client signers provided, at least one G... address must be provided",
+        "No verifiable client signers provided, at least one G... address must be provided"
       );
     }
 
@@ -550,7 +546,7 @@ export namespace Utils {
       if (op.type === "manageData" && op.name === "client_domain") {
         if (clientSigningKey) {
           throw new InvalidSep10ChallengeError(
-            "Found more than one client_domain operation",
+            "Found more than one client_domain operation"
           );
         }
         clientSigningKey = op.source;
@@ -585,7 +581,7 @@ export namespace Utils {
     // Confirm we matched a signature to the server signer.
     if (!serverSignatureFound) {
       throw new InvalidSep10ChallengeError(
-        "Transaction not signed by server: '" + serverKP.publicKey() + "'",
+        "Transaction not signed by server: '" + serverKP.publicKey() + "'"
       );
     }
 
@@ -593,21 +589,21 @@ export namespace Utils {
     if (clientSigningKey && !clientSigningKeySignatureFound) {
       throw new InvalidSep10ChallengeError(
         "Transaction not signed by the source account of the 'client_domain' " +
-          "ManageData operation",
+          "ManageData operation"
       );
     }
 
     // Confirm we matched at least one given signer with the transaction signatures
     if (signersFound.length === 1) {
       throw new InvalidSep10ChallengeError(
-        "None of the given signers match the transaction signatures",
+        "None of the given signers match the transaction signatures"
       );
     }
 
     // Confirm all signatures, including the server signature, were consumed by a signer:
     if (signersFound.length !== tx.signatures.length) {
       throw new InvalidSep10ChallengeError(
-        "Transaction has unrecognized signatures",
+        "Transaction has unrecognized signatures"
       );
     }
 
@@ -642,7 +638,7 @@ export namespace Utils {
    */
   export function verifyTxSignedBy(
     transaction: FeeBumpTransaction | Transaction,
-    accountID: string,
+    accountID: string
   ): boolean {
     return gatherTxSigners(transaction, [accountID]).length !== 0;
   }
@@ -672,11 +668,11 @@ export namespace Utils {
    */
   export function gatherTxSigners(
     transaction: FeeBumpTransaction | Transaction,
-    signers: string[],
+    signers: string[]
   ): string[] {
     const hashedSignatureBase = transaction.hash();
 
-    const txSignatures = clone(transaction.signatures);
+    const txSignatures = [...transaction.signatures];
     const signersFound = new Set<string>();
 
     for (const signer of signers) {
@@ -687,9 +683,9 @@ export namespace Utils {
       let keypair: Keypair;
       try {
         keypair = Keypair.fromPublicKey(signer); // This can throw a few different errors
-      } catch (err) {
+      } catch (err: any) {
         throw new InvalidSep10ChallengeError(
-          "Signer is not a valid address: " + err.message,
+          "Signer is not a valid address: " + err.message
         );
       }
 
@@ -721,7 +717,7 @@ export namespace Utils {
    */
   function validateTimebounds(
     transaction: Transaction,
-    gracePeriod: number = 0,
+    gracePeriod: number = 0
   ): boolean {
     if (!transaction.timeBounds) {
       return false;
