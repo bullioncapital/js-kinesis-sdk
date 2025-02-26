@@ -2,17 +2,17 @@
 # yarn lockfile v1
 
 
-"@abx/js-kinesis-base@7.1.0-beta.2":
-  version "7.1.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@abx/js-kinesis-base/-/js-kinesis-base-7.1.0-beta.2.tgz#7fd7cafde5f9b21628aabce6a9b4682b786fcead"
-  integrity sha512-ztdy3gSP9Q4c/C71f+SxKwT5IOPQ3znb40e9OXloYS8bLYCf/oAkSMeqtZNjPR80cGZS9St8jzKk5Wl8PQjTnA==
+"@abx/js-kinesis-base@9.0.0-beta.2":
+  version "9.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@abx/js-kinesis-base/-/js-kinesis-base-9.0.0-beta.2.tgz#9e8d9d035124208b75001152a10139430d09638e"
+  integrity sha512-kyYylGb7yo/7bkykDROq3JpBzJE99xbUTsaTdxQXWGjKV0G1IQE98ZFEDhbB+LHzr6cGGE99UuF3atjUk1+nvA==
   dependencies:
-    "@stellar/js-xdr" "^3.1.1"
+    "@stellar/js-xdr" "^3.1.2"
     base32.js "^0.1.0"
     bignumber.js "^9.1.2"
+    crypto-browserify "^3.12.0"
     sha.js "^2.3.6"
     tweetnacl "^1.0.3"
-    typescript "5.3.3"
   optionalDependencies:
     sodium-native "^4.1.1"
 
@@ -1392,10 +1392,10 @@
   resolved "https://registry.yarnpkg.com/@socket.io/component-emitter/-/component-emitter-3.1.2.tgz#821f8442f4175d8f0467b9daf26e3a18e2d02af2"
   integrity sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==
 
-"@stellar/js-xdr@^3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@stellar/js-xdr/-/js-xdr-3.1.1.tgz#be0ff90c8a861d6e1101bca130fa20e74d5599bb"
-  integrity sha512-3gnPjAz78htgqsNEDkEsKHKosV2BF2iZkoHCNxpmZwUxiPsw+2VaXMed8RRMe0rGk3d5GZe7RrSba8zV80J3Ag==
+"@stellar/js-xdr@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@stellar/js-xdr/-/js-xdr-3.1.2.tgz#db7611135cf21e989602fd72f513c3bed621bc74"
+  integrity sha512-VVolPL5goVEIsvuGqDc5uiKxV03lzfWdvYg1KikvwheDmTBO68CKDji3bAZ/kppZrx5iTA8z3Ld5yuytcvhvOQ==
 
 "@stellar/tsconfig@^1.0.2":
   version "1.0.2"
@@ -1470,7 +1470,7 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.5.tgz#a6ce3e556e00fd9895dd872dd172ad0d4bd687f4"
   integrity sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==
 
-"@types/eventsource@^1.1.12":
+"@types/eventsource@^1.1.2":
   version "1.1.15"
   resolved "https://registry.yarnpkg.com/@types/eventsource/-/eventsource-1.1.15.tgz#949383d3482e20557cbecbf3b038368d94b6be27"
   integrity sha512-XQmGcbnxUNa06HR3VBVkc9+A2Vpi9ZyLJcdS5dwaQQ/4ZMWFO+5c90FnMUpbtMZwB/FChoYHwuVg8TvkECacTA==
