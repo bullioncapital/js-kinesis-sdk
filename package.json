@@ -141,7 +141,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "@abx/js-kinesis-base": "9.0.0-beta.2",
+    "@abx/js-kinesis-base": "9.0.0-beta.3",
     "axios": "^1.8.1",
     "bignumber.js": "^9.1.2",
     "eventsource": "^2.0.2",
