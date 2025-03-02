@@ -1,5 +1,4 @@
-import { Asset } from "stellar-base";
-import { Omit } from "utility-types";
+import { Asset } from "@abx/js-kinesis-base";
 import { Horizon } from "./horizon_api";
 
 // more types
@@ -15,7 +14,7 @@ export namespace ServerApi {
   export type AccountRecordSigners = AccountRecordSignersType;
   export type AssetRecord = AssetRecordType;
   export interface CollectionPage<
-    T extends Horizon.BaseResponse = Horizon.BaseResponse
+    T extends Horizon.BaseResponse = Horizon.BaseResponse,
   > {
     records: T[];
     next: () => Promise<CollectionPage<T>>;
@@ -29,10 +28,10 @@ export namespace ServerApi {
   }
 
   export type CallFunction<
-    T extends Horizon.BaseResponse = Horizon.BaseResponse
+    T extends Horizon.BaseResponse = Horizon.BaseResponse,
   > = () => Promise<T>;
   export type CallCollectionFunction<
-    T extends Horizon.BaseResponse = Horizon.BaseResponse
+    T extends Horizon.BaseResponse = Horizon.BaseResponse,
   > = (options?: CallFunctionTemplateOptions) => Promise<CollectionPage<T>>;
 
   type BaseEffectRecordFromTypes =
@@ -149,6 +148,8 @@ export namespace ServerApi {
     max_tx_set_size: number;
     protocol_version: number;
     header_xdr: string;
+    base_percentage_fee: number;
+    max_fee: number;
     base_fee_in_stroops: number;
     base_reserve_in_stroops: number;
     /**
@@ -177,7 +178,7 @@ export namespace ServerApi {
   import OperationResponseTypeI = Horizon.OperationResponseTypeI;
   export interface BaseOperationRecord<
     T extends OperationResponseType = OperationResponseType,
-    TI extends OperationResponseTypeI = OperationResponseTypeI
+    TI extends OperationResponseTypeI = OperationResponseTypeI,
   > extends Horizon.BaseOperationResponse<T, TI> {
     self: CallFunction<OperationRecord>;
     succeeds: CallFunction<OperationRecord>;
@@ -297,6 +298,27 @@ export namespace ServerApi {
       >,
       Horizon.RevokeSponsorshipOperationResponse {}
 
+  export interface OnChainFeeOperationRecord extends BaseOperationRecord {
+    type:
+      | OperationResponseType.createAccount
+      | OperationResponseType.payment
+      | OperationResponseType.accountMerge
+      | OperationResponseType.inflation;
+    type_i:
+      | OperationResponseTypeI.createAccount
+      | OperationResponseTypeI.payment
+      | OperationResponseTypeI.accountMerge
+      | OperationResponseTypeI.inflation;
+    account: string;
+    to: string;
+    from: string;
+    into: string;
+    funder: string;
+    amount: string;
+    starting_balance: string;
+    source_account: string;
+  }
+
   export type OperationRecord =
     | CreateAccountOperationRecord
     | PaymentOperationRecord
@@ -315,7 +337,8 @@ export namespace ServerApi {
     | ClaimClaimableBalanceOperationRecord
     | BeginSponsoringFutureReservesOperationRecord
     | EndSponsoringFutureReservesOperationRecord
-    | RevokeSponsorshipOperationRecord;
+    | RevokeSponsorshipOperationRecord
+    | OnChainFeeOperationRecord;
 
   export namespace TradeRecord {
     interface Base extends Horizon.BaseResponse {

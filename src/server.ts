@@ -1,15 +1,12 @@
 /* tslint:disable:variable-name no-namespace */
-
-import BigNumber from "bignumber.js";
-import isEmpty from "lodash/isEmpty";
-import merge from "lodash/merge";
 import {
   Asset,
   FeeBumpTransaction,
   StrKey,
   Transaction,
   xdr,
-} from "stellar-base";
+} from "@abx/js-kinesis-base";
+import BigNumber from "bignumber.js";
 import URI from "urijs";
 
 import { CallBuilder } from "./call_builder";
@@ -43,6 +40,7 @@ import { TransactionCallBuilder } from "./transaction_call_builder";
 import HorizonAxiosClient, {
   getCurrentServerTime,
 } from "./horizon_axios_client";
+import { ServerApi } from "./server_api";
 
 export const SUBMIT_TRANSACTION_TIMEOUT = 60 * 1000;
 
@@ -74,9 +72,11 @@ export class Server {
    * TODO: Solve `URI(this.serverURL as any)`.
    */
   public readonly serverURL: URI;
+  public readonly v1: boolean;
 
   constructor(serverURL: string, opts: Server.Options = {}) {
     this.serverURL = URI(serverURL);
+    this.v1 = opts?.v1 === undefined ? true : opts.v1;
 
     const allowHttp =
       typeof opts.allowHttp === "undefined"
@@ -91,13 +91,10 @@ export class Server {
     if (opts.appVersion) {
       customHeaders["X-App-Version"] = opts.appVersion;
     }
-    if (opts.authToken) {
-      customHeaders["X-Auth-Token"] = opts.authToken;
-    }
-    if (!isEmpty(customHeaders)) {
+    if (Object.keys(customHeaders).length > 0) {
       HorizonAxiosClient.interceptors.request.use((config) => {
         // merge the custom headers with an existing headers
-        config.headers = merge(customHeaders, config.headers);
+        config.headers = Object.assign(config.headers, customHeaders);
 
         return config;
       });
@@ -140,7 +137,7 @@ export class Server {
    */
   public async fetchTimebounds(
     seconds: number,
-    _isRetry: boolean = false,
+    _isRetry: boolean = false
   ): Promise<Server.Timebounds> {
     // HorizonAxiosClient instead of this.ledgers so we can get at them headers
     const currentTime = getCurrentServerTime(this.serverURL.hostname());
@@ -173,9 +170,12 @@ export class Server {
    * @returns {Promise<number>} Promise that resolves to the base fee.
    */
   public async fetchBaseFee(): Promise<number> {
-    const response = await this.feeStats();
-
-    return parseInt(response.last_ledger_base_fee, 10) || 100;
+    if (this.v1) {
+      const response = await this.feeStats();
+      return parseInt(response.last_ledger_base_fee, 10) || 100;
+    } else {
+      return this._getBaseFeeV0();
+    }
   }
 
   /**
@@ -185,7 +185,7 @@ export class Server {
    */
   public async feeStats(): Promise<Horizon.FeeStatsResponse> {
     const cb = new CallBuilder<Horizon.FeeStatsResponse>(
-      URI(this.serverURL as any),
+      URI(this.serverURL as any)
     );
     cb.filter.push(["fee_stats"]);
     return cb.call();
@@ -297,7 +297,7 @@ export class Server {
    */
   public async submitTransaction(
     transaction: Transaction | FeeBumpTransaction,
-    opts: Server.SubmitTransactionOptions = { skipMemoRequiredCheck: false },
+    opts: Server.SubmitTransactionOptions = { skipMemoRequiredCheck: false }
   ): Promise<Horizon.SubmitTransactionResponse> {
     // only check for memo required if skipMemoRequiredCheck is false and the transaction doesn't include a memo.
     if (!opts.skipMemoRequiredCheck) {
@@ -305,10 +305,7 @@ export class Server {
     }
 
     const tx = encodeURIComponent(
-      transaction
-        .toEnvelope()
-        .toXDR()
-        .toString("base64"),
+      transaction.toEnvelope().toXDR().toString("base64")
     );
 
     return HorizonAxiosClient.post(
@@ -316,7 +313,7 @@ export class Server {
         .segment("transactions")
         .toString(),
       `tx=${tx}`,
-      { timeout: SUBMIT_TRANSACTION_TIMEOUT },
+      { timeout: SUBMIT_TRANSACTION_TIMEOUT }
     )
       .then((response) => {
         if (!response.data.result_xdr) {
@@ -324,8 +321,9 @@ export class Server {
         }
 
         // TODO: fix stellar-base types.
-        const responseXDR: xdr.TransactionResult = (xdr.TransactionResult
-          .fromXDR as any)(response.data.result_xdr, "base64");
+        const responseXDR: xdr.TransactionResult = (
+          xdr.TransactionResult.fromXDR as any
+        )(response.data.result_xdr, "base64");
 
         // TODO: fix stellar-base types.
         const results = (responseXDR as any).result().value();
@@ -349,10 +347,7 @@ export class Server {
               let amountBought = new BigNumber(0);
               let amountSold = new BigNumber(0);
 
-              const offerSuccess = result
-                .value()
-                .value()
-                .success();
+              const offerSuccess = result.value().value().success();
 
               const offersClaimed = offerSuccess
                 .offersClaimed()
@@ -364,12 +359,12 @@ export class Server {
                   switch (offerClaimedAtom.switch()) {
                     case xdr.ClaimAtomType.claimAtomTypeV0():
                       sellerId = StrKey.encodeEd25519PublicKey(
-                        offerClaimed.sellerEd25519(),
+                        offerClaimed.sellerEd25519()
                       );
                       break;
                     case xdr.ClaimAtomType.claimAtomTypeOrderBook():
                       sellerId = StrKey.encodeEd25519PublicKey(
-                        offerClaimed.sellerId().ed25519(),
+                        offerClaimed.sellerId().ed25519()
                       );
                       break;
                     // It shouldn't be possible for a claimed offer to have type
@@ -381,17 +376,17 @@ export class Server {
                     default:
                       throw new Error(
                         "Invalid offer result type: " +
-                          offerClaimedAtom.switch(),
+                          offerClaimedAtom.switch()
                       );
                   }
 
                   const claimedOfferAmountBought = new BigNumber(
                     // amountBought is a js-xdr hyper
-                    offerClaimed.amountBought().toString(),
+                    offerClaimed.amountBought().toString()
                   );
                   const claimedOfferAmountSold = new BigNumber(
                     // amountBought is a js-xdr hyper
-                    offerClaimed.amountSold().toString(),
+                    offerClaimed.amountSold().toString()
                   );
 
                   // This is an offer that was filled by the one just submitted.
@@ -399,12 +394,12 @@ export class Server {
                   // than from what we just submitted!
                   // So add this claimed offer's bought to the SOLD count and vice v
 
-                  amountBought = amountBought.add(claimedOfferAmountSold);
-                  amountSold = amountSold.add(claimedOfferAmountBought);
+                  amountBought = amountBought.plus(claimedOfferAmountSold);
+                  amountSold = amountSold.plus(claimedOfferAmountBought);
 
                   const sold = Asset.fromOperation(offerClaimed.assetSold());
                   const bought = Asset.fromOperation(
-                    offerClaimed.assetBought(),
+                    offerClaimed.assetBought()
                   );
 
                   const assetSold = {
@@ -502,8 +497,8 @@ export class Server {
         return Promise.reject(
           new BadResponseError(
             `Transaction submission failed. Server responded: ${response.status} ${response.statusText}`,
-            response.data,
-          ),
+            response.data
+          )
         );
       });
   }
@@ -563,7 +558,7 @@ export class Server {
     return new OrderbookCallBuilder(
       URI(this.serverURL as any),
       selling,
-      buying,
+      buying
     );
   }
 
@@ -619,13 +614,13 @@ export class Server {
   public strictReceivePaths(
     source: string | Asset[],
     destinationAsset: Asset,
-    destinationAmount: string,
+    destinationAmount: string
   ): PathCallBuilder {
     return new StrictReceivePathCallBuilder(
       URI(this.serverURL as any),
       source,
       destinationAsset,
-      destinationAmount,
+      destinationAmount
     );
   }
 
@@ -647,13 +642,13 @@ export class Server {
   public strictSendPaths(
     sourceAsset: Asset,
     sourceAmount: string,
-    destination: string | Asset[],
+    destination: string | Asset[]
   ): PathCallBuilder {
     return new StrictSendPathCallBuilder(
       URI(this.serverURL as any),
       sourceAsset,
       sourceAmount,
-      destination,
+      destination
     );
   }
 
@@ -702,9 +697,7 @@ export class Server {
    * with populated sequence number.
    */
   public async loadAccount(accountId: string): Promise<AccountResponse> {
-    const res = await this.accounts()
-      .accountId(accountId)
-      .call();
+    const res = await this.accounts().accountId(accountId).call();
 
     return new AccountResponse(res);
   }
@@ -726,7 +719,7 @@ export class Server {
     start_time: number,
     end_time: number,
     resolution: number,
-    offset: number,
+    offset: number
   ): TradeAggregationCallBuilder {
     return new TradeAggregationCallBuilder(
       URI(this.serverURL as any),
@@ -735,7 +728,7 @@ export class Server {
       start_time,
       end_time,
       resolution,
-      offset,
+      offset
     );
   }
 
@@ -758,7 +751,7 @@ export class Server {
    * @throws  {AccountRequiresMemoError}
    */
   public async checkMemoRequired(
-    transaction: Transaction | FeeBumpTransaction,
+    transaction: Transaction | FeeBumpTransaction
   ): Promise<void> {
     if (transaction instanceof FeeBumpTransaction) {
       transaction = transaction.innerTransaction;
@@ -801,7 +794,7 @@ export class Server {
           throw new AccountRequiresMemoError(
             "account requires memo",
             destination,
-            i,
+            i
           );
         }
       } catch (e) {
@@ -818,6 +811,15 @@ export class Server {
       }
     }
   }
+
+  private async _getBaseFeeV0(): Promise<number> {
+    const cb = new CallBuilder<
+      ServerApi.CollectionPage<ServerApi.LedgerRecord>
+    >(URI(this.serverURL as any));
+    cb.filter.push(["ledgers"]);
+    const { records } = await cb.order("desc").limit(1).call();
+    return records[0].base_fee_in_stroops || 100;
+  }
 }
 
 export namespace Server {
@@ -825,7 +827,7 @@ export namespace Server {
     allowHttp?: boolean;
     appName?: string;
     appVersion?: string;
-    authToken?: string;
+    v1?: boolean;
   }
 
   export interface Timebounds {

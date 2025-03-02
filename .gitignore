@@ -3,8 +3,15 @@
 /lib/
 /libdocs/
 /dist/
+/lib/
 /coverage/
+/.nyc_output/
 /jsdoc/
 .DS_Store
 .idea/
 js-stellar-base/
+
+test/unit/out/
+.vscode/launch.json
+
+target

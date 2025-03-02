@@ -2,7 +2,6 @@
 /// <reference path="../types/dom-monkeypatch.d.ts" />
 
 /* tslint:disable:no-var-requires */
-require("es6-promise").polyfill();
 const version = require("../package.json").version;
 
 // Expose all types
@@ -30,7 +29,7 @@ export {
 export * from "./utils";
 
 // expose classes and functions from stellar-base
-export * from "stellar-base";
+export * from "@abx/js-kinesis-base";
 
 export { version };
 

@@ -1,5 +1,5 @@
+import { StrKey } from "@abx/js-kinesis-base";
 import axios from "axios";
-import { StrKey } from "stellar-base";
 import URI from "urijs";
 
 import { Config } from "./config";
