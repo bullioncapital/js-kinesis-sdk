@@ -63,6 +63,7 @@ function _getAmountInLumens(amt: BigNumber) {
  * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments! You can also use {@link Config} class to set this globally.
  * @param {string} [opts.appName] - Allow set custom header `X-App-Name`, default: `undefined`.
  * @param {string} [opts.appVersion] - Allow set custom header `X-App-Version`, default: `undefined`.
+ * @param {string} [opts.authToken] - Allow set custom header `X-Auth-Token`, default: `undefined`.
  */
 export class Server {
   /**

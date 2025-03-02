@@ -6,6 +6,92 @@ A breaking change will get clearly marked in this log.
 ## Unreleased
 
 
+## [v10.4.1](https://github.com/stellar/js-stellar-sdk/compare/v10.4.0...v10.4.1)
+
+### Update
+
+- Bumps `stellar-base` version to [v8.2.2](https://github.com/stellar/js-stellar-base/releases/tag/v8.2.2) to include latest fix: enabling fast signing in service workers ([#806](https://github.com/stellar/js-stellar-sdk/pull/806)).
+
+
+## [v10.4.0](https://github.com/stellar/js-stellar-sdk/compare/v10.3.0...v10.4.0)
+
+### Add
+
+- Add [SEP-1](https://stellar.org/protocol/sep-1) fields to `StellarTomlResolver` for type checks ([#794](https://github.com/stellar/js-stellar-sdk/pull/794)).
+
+- Add support for passing `X-Auth-Token` as a custom header ([#795](https://github.com/stellar/js-stellar-sdk/pull/795)).
+
+### Update
+
+- Bumps `stellar-base` version to [v8.2.1](https://github.com/stellar/js-stellar-base/releases/tag/v8.2.1) to include latest fixes.
+
+
+## [v10.3.0](https://github.com/stellar/js-stellar-sdk/compare/v10.2.0...v10.3.0)
+
+### Fix
+
+- Adds `successful` field to transaction submission response ([#790](https://github.com/stellar/js-stellar-sdk/pull/790)).
+
+### Update
+
+- Bumps `stellar-base` version to [v8.2.0](https://github.com/stellar/js-stellar-base/releases/tag/v8.2.0) to include CAP-40 support in `Operation.setOptions`.
+
+
+## [v10.2.0](https://github.com/stellar/js-stellar-sdk/compare/v10.1.2...v10.2.0)
+
+### Fix
+
+- Adds the missing `successful` field to transaction responses ([#790](https://github.com/stellar/js-stellar-sdk/pull/790)).
+
+### Update
+
+- Bumps `stellar-base` version to [v8.1.0](https://github.com/stellar/js-stellar-base/releases/tag/v8.1.0) to include bug fixes and latest XDR changes.
+
+
+## [v10.1.2](https://github.com/stellar/js-stellar-sdk/compare/v10.1.1...v10.1.2)
+
+### Fix
+
+- Upgrades the `eventsource` dependency to fix a critical security vulnerability ([#783](https://github.com/stellar/js-stellar-sdk/pull/783)).
+
+
+## [v10.1.1](https://github.com/stellar/js-stellar-sdk/compare/v10.1.0...v10.1.1)
+
+### Fix
+
+- Reverts a change from [v10.1.0](#v10.1.0) which caused streams to die prematurely ([#780](https://github.com/stellar/js-stellar-sdk/pull/780)).
+
+- Bumps `stellar-base` version to [v8.0.1](https://github.com/stellar/js-stellar-base/releases/tag/v8.0.1) to include latest bugfixes.
+
+
+## [v10.1.0](https://github.com/stellar/js-stellar-sdk/compare/v10.0.1...v10.1.0-beta.0)
+
+This is a promotion from the beta version without changes, besides upgrading the underlying [stellar-base@v8.0.0](https://github.com/stellar/js-stellar-base/releases/tag/v8.0.0) to its stable release.
+
+
+## [v10.1.0-beta.0](https://github.com/stellar/js-stellar-sdk/compare/v10.0.1...v10.1.0-beta.0)
+
+### Add
+
+- Add a way to filter offers by seller: `OfferCallBuilder.seller(string)`, corresponding to `GET /offers?seller=<string>` ([#773](https://github.com/stellar/js-stellar-sdk/pull/773)).
+
+### Add
+
+- Support for Protocol 19 ([#775](https://github.com/stellar/js-stellar-sdk/pull/775)):
+
+  * new precondition fields on a `TransactionResponse`
+  * new account fields on `AccountResponse` and `AccountRecord`
+  * bumping `stellar-base` to the latest beta version
+
+### Fix
+
+- Add missing field to account responses: `last_modified_time` which is the time equivalent of the existing `last_modified_ledger` ([#770](https://github.com/stellar/js-stellar-sdk/pull/770)).
+
+- Stop opening extra connections when SSE streams receive `event: close` events ([#772](https://github.com/stellar/js-stellar-sdk/pull/772)).
+
+- Fix SSE streams not loading under React Native (thank you, @hunterpetersen!) ([#761](https://github.com/stellar/js-stellar-sdk/pull/761)).
+
+
 ## [v10.0.1](https://github.com/stellar/js-stellar-sdk/compare/v10.0.0...v10.0.1)
 
 ### Fix
