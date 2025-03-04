@@ -15,3 +15,5 @@ test/unit/out/
 .vscode/launch.json
 
 target
+
+config/tsconfig.tmp.json

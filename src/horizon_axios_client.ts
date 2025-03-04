@@ -1,8 +1,9 @@
-import axios, { AxiosResponse } from "axios";
 import URI from "urijs";
+import { create, HttpResponseHeaders } from "./http-client";
 
-/* tslint:disable-next-line:no-var-requires */
-const version = require("../package.json").version;
+// eslint-disable-next-line prefer-import/prefer-import-over-require , @typescript-eslint/naming-convention
+declare const __PACKAGE_VERSION__: string;
+export const version = __PACKAGE_VERSION__;
 
 export interface ServerTime {
   serverTime: number;
@@ -23,33 +24,45 @@ export interface ServerTime {
  */
 export const SERVER_TIME_MAP: Record<string, ServerTime> = {};
 
-const HorizonAxiosClient = axios.create({
+const HorizonAxiosClient = create({
   headers: {
     "X-Client-Name": "js-kinesis-sdk",
     "X-Client-Version": version,
   },
 });
 
-function _toSeconds(ms: number): number {
+function toSeconds(ms: number): number {
   return Math.floor(ms / 1000);
 }
 
-HorizonAxiosClient.interceptors.response.use(
-  function interceptorHorizonResponse(response: AxiosResponse) {
-    const hostname = URI(response.config.url!).hostname();
-    const serverTime = _toSeconds(Date.parse(response.headers.date));
-    const localTimeRecorded = _toSeconds(new Date().getTime());
-
-    if (!isNaN(serverTime)) {
-      SERVER_TIME_MAP[hostname] = {
-        serverTime,
-        localTimeRecorded,
-      };
+HorizonAxiosClient.interceptors.response.use((response) => {
+  const hostname = URI(response.config.url!).hostname();
+  let serverTime = 0;
+  if (response.headers instanceof Headers) {
+    const dateHeader = response.headers.get("date");
+    if (dateHeader) {
+      serverTime = toSeconds(Date.parse(dateHeader));
     }
+  } else if (
+    typeof response.headers === "object" &&
+    "date" in response.headers
+  ) {
+    const headers = response.headers as HttpResponseHeaders; // Cast response.headers to the correct type
+    if (typeof headers.date === "string") {
+      serverTime = toSeconds(Date.parse(headers.date));
+    }
+  }
+  const localTimeRecorded = toSeconds(new Date().getTime());
 
-    return response;
-  },
-);
+  if (!Number.isNaN(serverTime)) {
+    SERVER_TIME_MAP[hostname] = {
+      serverTime,
+      localTimeRecorded,
+    };
+  }
+
+  return response;
+});
 
 export default HorizonAxiosClient;
 
@@ -70,7 +83,7 @@ export function getCurrentServerTime(hostname: string): number | null {
   }
 
   const { serverTime, localTimeRecorded } = entry;
-  const currentTime = _toSeconds(new Date().getTime());
+  const currentTime = toSeconds(new Date().getTime());
 
   // if it's been more than 5 minutes from the last time, then null it out
   if (currentTime - localTimeRecorded > 60 * 5) {

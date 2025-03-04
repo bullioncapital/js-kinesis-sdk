@@ -93,7 +93,9 @@ export class Server {
     }
     if (Object.keys(customHeaders).length > 0) {
       HorizonAxiosClient.interceptors.request.use((config) => {
-        // merge the custom headers with an existing headers
+        // merge the custom headers with an existing headers, where customs
+        // override defaults
+        config.headers = config.headers || {};
         config.headers = Object.assign(config.headers, customHeaders);
 
         return config;
