@@ -22,9 +22,9 @@ const config = {
     fallback: {
       crypto: require.resolve('crypto-browserify'),
       stream: require.resolve('stream-browserify'),
-      buffer: require.resolve('buffer')
+      buffer: require.resolve('buffer'),
     },
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
   },
   output: {
     clean: process.env.no_clean ? false: true,
