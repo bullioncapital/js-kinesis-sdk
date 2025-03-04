@@ -11,8 +11,7 @@ describe("federation-server.js tests", function () {
   });
 
   afterEach(function () {
-    this.axiosMock.verify();
-    this.axiosMock.restore();
+    this.axiosMock.verify(); // also restores
   });
 
   describe("FederationServer.constructor", function () {

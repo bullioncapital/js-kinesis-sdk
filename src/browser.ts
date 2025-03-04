@@ -1,8 +1,8 @@
 /* tslint:disable:no-var-requires */
+import { httpClient } from "./http-client";
 export * from "./index";
 export * as StellarBase from "@abx/js-kinesis-base";
 
-import axios from "axios"; // idk why axios is weird
-export { axios };
+export { httpClient };
 
 export default module.exports;

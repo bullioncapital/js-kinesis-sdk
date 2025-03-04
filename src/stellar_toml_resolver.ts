@@ -1,5 +1,5 @@
-import axios from "axios";
 import { Networks } from "@abx/js-kinesis-base";
+import { httpClient } from "./http-client";
 import toml from "toml";
 import { Config } from "./config";
 
@@ -8,7 +8,7 @@ export const STELLAR_TOML_MAX_SIZE = 100 * 1024;
 
 // axios timeout doesn't catch missing urls, e.g. those with no response
 // so we use the axios cancel token to ensure the timeout
-const CancelToken = axios.CancelToken;
+const CancelToken = httpClient.CancelToken;
 
 /**
  * StellarTomlResolver allows resolving `stellar.toml` files.
@@ -34,7 +34,7 @@ export class StellarTomlResolver {
    */
   public static async resolve(
     domain: string,
-    opts: StellarTomlResolver.StellarTomlResolveOptions = {},
+    opts: StellarTomlResolver.StellarTomlResolveOptions = {}
   ): Promise<StellarTomlResolver.StellarToml> {
     const allowHttp =
       typeof opts.allowHttp === "undefined"
@@ -46,16 +46,16 @@ export class StellarTomlResolver {
 
     const protocol = allowHttp ? "http" : "https";
 
-    return axios
+    return httpClient
       .get(`${protocol}://${domain}/.well-known/stellar.toml`, {
         maxContentLength: STELLAR_TOML_MAX_SIZE,
         cancelToken: timeout
           ? new CancelToken((cancel) =>
-            setTimeout(
-              () => cancel(`timeout of ${timeout}ms exceeded`),
-              timeout,
-            ),
-          )
+              setTimeout(
+                () => cancel(`timeout of ${timeout}ms exceeded`),
+                timeout
+              )
+            )
           : undefined,
         timeout,
       })
@@ -66,15 +66,15 @@ export class StellarTomlResolver {
         } catch (e: any) {
           return Promise.reject(
             new Error(
-              `stellar.toml is invalid - Parsing error on line ${e.line}, column ${e.column}: ${e.message}`,
-            ),
+              `stellar.toml is invalid - Parsing error on line ${e.line}, column ${e.column}: ${e.message}`
+            )
           );
         }
       })
       .catch((err: Error) => {
         if (err.message.match(/^maxContentLength size/)) {
           throw new Error(
-            `stellar.toml file exceeds allowed size of ${STELLAR_TOML_MAX_SIZE}`,
+            `stellar.toml file exceeds allowed size of ${STELLAR_TOML_MAX_SIZE}`
           );
         } else {
           throw err;
@@ -136,14 +136,14 @@ export namespace StellarTomlResolver {
     max_number?: number;
     is_asset_anchored?: boolean;
     anchor_asset_type?:
-    | "fiat"
-    | "crypto"
-    | "nft"
-    | "stock"
-    | "bond"
-    | "commodity"
-    | "realestate"
-    | "other";
+      | "fiat"
+      | "crypto"
+      | "nft"
+      | "stock"
+      | "bond"
+      | "commodity"
+      | "realestate"
+      | "other";
     anchor_asset?: string;
     attestation_of_reserve?: Url;
     attestation_of_reserve_amount?: string;

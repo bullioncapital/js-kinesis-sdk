@@ -40,3 +40,6 @@ jobs:
 
       - name: Browser Tests
         run: yarn test:browser
+
+      - name: Browser No Axios Tests
+        run: yarn test:browser:no-axios

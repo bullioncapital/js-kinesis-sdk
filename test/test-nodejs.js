@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 require("@babel/register");
-global.StellarSdk = require("../lib/");
+global.StellarSdk = require("../lib");
 
 global.axios = require("axios");
 global.HorizonAxiosClient = StellarSdk.HorizonAxiosClient;
