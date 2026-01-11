@@ -1,5 +1,5 @@
 ---
-title: Basic Examples
+title: Kinesis SDK Example
 ---
 # Kinesis SDK Example
 
@@ -186,6 +186,46 @@ const es = server.payments()
       console.log(message);
     }
   })
+```
+
+## Account
+
+### Generate random Keypair
+
+```javascript
+import { Keypair } from '@abx/js-kinesis-sdk'
+
+const keypair = Keypair.random()
+console.log({
+  publicKey: keypair.publicKey(),
+  secret: keypair.secret(),
+})
+```
+
+### Generate Keypair using passphrase
+
+```javascript
+import { Keypair } from '@abx/js-kinesis-sdk'
+import crypto from 'crypto'
+
+const passphrase = 'my secret passphrase'
+const hash = crypto.createHash('sha256').update(passphrase).digest()
+
+const keypair = Keypair.fromRawEd25519Seed(hash)
+console.log({
+  publicKey: keypair.publicKey(),
+  secret: keypair.secret(),
+})
+```
+
+### Account Validation
+
+Using the following code snippet, you can validate a Stellar public key:
+
+```javascript
+import { StrKey } from '@abx/js-kinesis-sdk'
+
+StrKey.isValidEd25519PublicKey('GCHDQROCJXS4TPR5YKVT2EMFZKF6LAA7UEJTHRPGB2AQODOT66HGSAUD')
 ```
 
 For more on streaming events, please check out [the Horizon documentation](https://developers.stellar.org/api/introduction/streaming/) and this [guide to server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
